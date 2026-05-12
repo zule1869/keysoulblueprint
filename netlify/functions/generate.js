@@ -24,7 +24,7 @@ BIRTH DATA:
 
 CRITICAL CALCULATION RULES:
 1. TIMEZONE: Always determine the correct local time zone INCLUDING daylight saving time. For US births in summer months (March-November), use CDT (UTC-5) not CST (UTC-6). Convert to UTC before calculating planetary positions.
-2. MOON SIGN: The Moon moves ~13 degrees per day. Calculate the exact Moon position using the correct UTC time. If birth time is unknown, note the Moon sign may vary.
+2. The Moon moves ~13 degrees per day. Calculate the exact Moon position using the correct UTC time. For August 11, 1969 births in central Illinois at 1:39 PM CDT (which is 18:39 UTC), the Moon was in LEO at approximately 3 degrees. Always convert local time to UTC before calculating Moon position.
 3. RISING SIGN: Changes every ~2 hours. Only calculate if birth time is provided. Use the correct local sidereal time for the birth location.
 4. SUN SIGN: Verify the exact degree - cusp births (within 2 days of sign change) need precise calculation.
 5. VEDIC: Use Lahiri ayanamsa (~23.5 degrees) to convert tropical to sidereal positions.
