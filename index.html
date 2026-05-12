@@ -1006,7 +1006,7 @@ Respond ONLY with a valid JSON object, no markdown, no backticks, no explanation
     const response = await fetch("/.netlify/functions/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: prompt })
+      body: JSON.stringify({ name, date, time, place, pronouns })
     });
 
     debugLog.push(`Response status: ${response.status}`);
