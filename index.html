@@ -634,6 +634,134 @@
     line-height: 1.9;
   }
 
+  /* PASSWORD GATE */
+  #password-gate {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+  }
+
+  .gate-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 44px 40px 40px;
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .gate-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .gate-icon {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .gate-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    animation: fadeDown 0.8s ease 0.1s both;
+  }
+
+  .gate-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    line-height: 1.7;
+    animation: fadeDown 0.8s ease 0.2s both;
+  }
+
+  .gate-input {
+    width: 100%;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 13px 16px;
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+    text-align: center;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 14px;
+  }
+
+  .gate-input:focus {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+  }
+
+  .gate-input::placeholder {
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+  }
+
+  .gate-btn {
+    width: 100%;
+    padding: 13px 24px;
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-bottom: 14px;
+  }
+
+  .gate-btn:hover {
+    background: linear-gradient(135deg, rgba(201,168,76,0.25), rgba(201,168,76,0.15));
+    box-shadow: 0 0 20px rgba(201,168,76,0.15);
+  }
+
+  .gate-error {
+    color: #e89090;
+    font-size: 0.82rem;
+    margin-top: 4px;
+    display: none;
+  }
+
+  .gate-purchase {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .gate-purchase a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .gate-purchase a:hover { color: var(--gold-light); }
+
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-16px); }
     to { opacity: 1; transform: translateY(0); }
@@ -654,8 +782,24 @@
 <div class="stars"></div>
 <div class="page">
 
+  <!-- ── PASSWORD GATE ── -->
+  <div id="password-gate">
+    <div class="gate-card">
+      <div class="gate-icon">🔮</div>
+      <div class="gate-title">Soul Blueprint</div>
+      <p class="gate-sub">Enter your access code to unlock<br>your personalized reading</p>
+      <input class="gate-input" type="text" id="accessCode" placeholder="Enter access code" maxlength="20" onkeydown="if(event.key==='Enter') checkCode()">
+      <button class="gate-btn" onclick="checkCode()">✦ &nbsp; Unlock My Blueprint &nbsp; ✦</button>
+      <div class="gate-error" id="gateError">Invalid access code. Please check your Gumroad receipt and try again.</div>
+      <div class="gate-purchase">
+        Don't have an access code?<br>
+        <a href="https://zule1869.gumroad.com/l/yqnibu" target="_blank">Purchase your Soul Blueprint reading — $17 →</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ── LANDING / INPUT ── -->
-  <div id="landing">
+  <div id="landing" style="display:none;">
     <div class="landing-eyebrow">Ancient Wisdom · Modern Clarity</div>
     <h1 class="landing-title">Soul Blueprint</h1>
     <p class="landing-subtitle">Your complete multi-dimensional portrait across five ancient systems</p>
@@ -826,7 +970,7 @@
 
       <div class="footnote" id="rFootnote">
         Five-System Soul Blueprint · Western Tropical · Vedic Sidereal · Pythagorean Numerology · BaZi Four Pillars · Traditional Chinese Zodiac<br>
-        For reflective and personal use. Planetary positions are AI-calculated and may vary slightly from professional chart software. For maximum accuracy, verify your placements at astro.com using your exact birth time and location..
+        For reflective and entertainment purposes.
       </div>
     </div>
   </div>
@@ -834,6 +978,26 @@
 </div>
 
 <script>
+// ── ACCESS CODE CHECK ──
+const VALID_CODES = ['SOUL2026', 'BLUEPRINT17', 'KEY2026'];
+
+function checkCode() {
+  const input = document.getElementById('accessCode').value.trim().toUpperCase();
+  const errorEl = document.getElementById('gateError');
+
+  if (VALID_CODES.includes(input)) {
+    document.getElementById('password-gate').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+    errorEl.style.display = 'none';
+  } else {
+    errorEl.style.display = 'block';
+    document.getElementById('accessCode').style.borderColor = 'rgba(180,60,60,0.6)';
+    setTimeout(() => {
+      document.getElementById('accessCode').style.borderColor = '';
+    }, 2000);
+  }
+}
+
 // ── STEP ANIMATOR ──
 function animateSteps() {
   const steps = ['step1','step2','step3','step4','step5','step6'];
